@@ -1,0 +1,14 @@
+steps:
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - gcloud
+      - run
+      - deploy
+      - mailer-pipeline
+      - --source=.
+      - --region=us-central1
+      - --project=gestion-365
+      - --quiet
+
+options:
+  logging: CLOUD_LOGGING_ONLY
