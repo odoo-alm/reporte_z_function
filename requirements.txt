@@ -1,0 +1,13 @@
+flask==3.1.0
+google-cloud-bigquery==3.31.0
+google-cloud-logging==3.11.4
+google-cloud-storage==2.19.0
+google-api-python-client==2.165.0
+google-auth==2.38.0
+openpyxl==3.1.5
+pandas==2.2.3
+numpy==1.26.4
+db-dtypes==1.4.2
+tenacity==9.0.0
+gunicorn==21.2.0
+beautifulsoup4==4.13.3

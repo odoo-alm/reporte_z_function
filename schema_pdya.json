@@ -1,0 +1,214 @@
+{
+  "creationTime": "1774121071268",
+  "etag": "l3gPVhtlrMzYwpbfiwJUsw==",
+  "id": "gestion-365:mailer_raw.mailer_pdya_raw",
+  "kind": "bigquery#table",
+  "lastModifiedTime": "1774553313178",
+  "location": "us-central1",
+  "numActiveLogicalBytes": "0",
+  "numActivePhysicalBytes": "11832",
+  "numBytes": "0",
+  "numCurrentPhysicalBytes": "1318",
+  "numLongTermBytes": "0",
+  "numLongTermLogicalBytes": "0",
+  "numLongTermPhysicalBytes": "0",
+  "numRows": "0",
+  "numTimeTravelPhysicalBytes": "10514",
+  "numTotalLogicalBytes": "0",
+  "numTotalPhysicalBytes": "11832",
+  "schema": {
+    "fields": [
+      {
+        "name": "nombre_local",
+        "type": "STRING"
+      },
+      {
+        "name": "nro_pedido",
+        "type": "STRING"
+      },
+      {
+        "name": "id_local",
+        "type": "STRING"
+      },
+      {
+        "name": "metodo_entrega",
+        "type": "STRING"
+      },
+      {
+        "name": "forma_pago",
+        "type": "STRING"
+      },
+      {
+        "name": "pedido_programado",
+        "type": "STRING"
+      },
+      {
+        "name": "direccion_restaurante",
+        "type": "STRING"
+      },
+      {
+        "name": "estado_pedido",
+        "type": "STRING"
+      },
+      {
+        "name": "fecha_pedido",
+        "type": "STRING"
+      },
+      {
+        "name": "aceptado_en",
+        "type": "STRING"
+      },
+      {
+        "name": "lista_retiro",
+        "type": "STRING"
+      },
+      {
+        "name": "repartidor_cerca",
+        "type": "STRING"
+      },
+      {
+        "name": "retirado_del_local",
+        "type": "STRING"
+      },
+      {
+        "name": "entregado_el",
+        "type": "STRING"
+      },
+      {
+        "name": "tiene_reclamos",
+        "type": "STRING"
+      },
+      {
+        "name": "motivo_reclamo",
+        "type": "STRING"
+      },
+      {
+        "name": "cancelado_el",
+        "type": "STRING"
+      },
+      {
+        "name": "motivo_rechazo",
+        "type": "STRING"
+      },
+      {
+        "name": "responsable_rechazo",
+        "type": "STRING"
+      },
+      {
+        "name": "total_pedido",
+        "type": "FLOAT"
+      },
+      {
+        "name": "tarifa_minima_pedido",
+        "type": "FLOAT"
+      },
+      {
+        "name": "resarcimientos",
+        "type": "FLOAT"
+      },
+      {
+        "name": "cargo_impositivo",
+        "type": "FLOAT"
+      },
+      {
+        "name": "tarifa_pago",
+        "type": "FLOAT"
+      },
+      {
+        "name": "descuentos_subsidiados_tienda",
+        "type": "FLOAT"
+      },
+      {
+        "name": "voucher_subsidiado_tienda",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision",
+        "type": "FLOAT"
+      },
+      {
+        "name": "cargos",
+        "type": "FLOAT"
+      },
+      {
+        "name": "cargos_descuentos_fugaces",
+        "type": "FLOAT"
+      },
+      {
+        "name": "tarifa_servicios_publicidad",
+        "type": "FLOAT"
+      },
+      {
+        "name": "es_pagadero",
+        "type": "STRING"
+      },
+      {
+        "name": "pagado",
+        "type": "STRING"
+      },
+      {
+        "name": "ingreso_estimado",
+        "type": "STRING"
+      },
+      {
+        "name": "monto_efectivo_cobrado",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_adeudado_pedidosya",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_pago",
+        "type": "FLOAT"
+      },
+      {
+        "name": "descuento_financiado_pedidosya",
+        "type": "FLOAT"
+      },
+      {
+        "name": "voucher_financiado_pedidosya",
+        "type": "FLOAT"
+      },
+      {
+        "name": "descuento_total",
+        "type": "FLOAT"
+      },
+      {
+        "name": "total_voucher",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_impuestos",
+        "type": "FLOAT"
+      },
+      {
+        "name": "articulos",
+        "type": "STRING"
+      },
+      {
+        "name": "etiqueta",
+        "type": "STRING"
+      },
+      {
+        "name": "filename",
+        "type": "STRING"
+      },
+      {
+        "name": "gmail_msg_id",
+        "type": "STRING"
+      },
+      {
+        "name": "processed_at",
+        "type": "TIMESTAMP"
+      }
+    ]
+  },
+  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/gestion-365/datasets/mailer_raw/tables/mailer_pdya_raw",
+  "tableReference": {
+    "datasetId": "mailer_raw",
+    "projectId": "gestion-365",
+    "tableId": "mailer_pdya_raw"
+  },
+  "type": "TABLE"
+}

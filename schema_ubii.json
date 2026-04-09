@@ -1,0 +1,150 @@
+{
+  "creationTime": "1774121000680",
+  "etag": "n1l2YUq2YfN9OeTJBhHUQg==",
+  "id": "gestion-365:mailer_raw.mailer_ubii_raw",
+  "kind": "bigquery#table",
+  "lastModifiedTime": "1774553311752",
+  "location": "us-central1",
+  "numActiveLogicalBytes": "0",
+  "numActivePhysicalBytes": "22014",
+  "numBytes": "0",
+  "numCurrentPhysicalBytes": "1091",
+  "numLongTermBytes": "0",
+  "numLongTermLogicalBytes": "0",
+  "numLongTermPhysicalBytes": "0",
+  "numRows": "0",
+  "numTimeTravelPhysicalBytes": "20923",
+  "numTotalLogicalBytes": "0",
+  "numTotalPhysicalBytes": "22014",
+  "schema": {
+    "fields": [
+      {
+        "name": "fecha_cierre",
+        "type": "DATE"
+      },
+      {
+        "name": "terminal",
+        "type": "STRING"
+      },
+      {
+        "name": "oficina",
+        "type": "STRING"
+      },
+      {
+        "name": "nro_lote",
+        "type": "INTEGER"
+      },
+      {
+        "name": "tipo",
+        "type": "STRING"
+      },
+      {
+        "name": "inmediata",
+        "type": "STRING"
+      },
+      {
+        "name": "monto",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_tdc",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_tdd",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_tdc",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_islr",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_tdd",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_transferencia",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_inmediata",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_fee",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_cuota_credito",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_gastos_admin_credito",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_gastos_reactivacion_credito",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_nota_debito",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_ajuste_liquidacion",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_a_liquidar",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_tdc_visa",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_tdc_visa",
+        "type": "FLOAT"
+      },
+      {
+        "name": "islr_tdc_visa",
+        "type": "FLOAT"
+      },
+      {
+        "name": "comision_transferencia_visa",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_a_liquidar_visa",
+        "type": "FLOAT"
+      },
+      {
+        "name": "etiqueta",
+        "type": "STRING"
+      },
+      {
+        "name": "filename",
+        "type": "STRING"
+      },
+      {
+        "name": "gmail_msg_id",
+        "type": "STRING"
+      },
+      {
+        "name": "processed_at",
+        "type": "TIMESTAMP"
+      }
+    ]
+  },
+  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/gestion-365/datasets/mailer_raw/tables/mailer_ubii_raw",
+  "tableReference": {
+    "datasetId": "mailer_raw",
+    "projectId": "gestion-365",
+    "tableId": "mailer_ubii_raw"
+  },
+  "type": "TABLE"
+}

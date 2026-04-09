@@ -1,0 +1,110 @@
+{
+  "creationTime": "1774629157653",
+  "etag": "7s5pq/bOsF3yIQsiRbnwBw==",
+  "id": "gestion-365:mailer_raw.mailer_fact_received",
+  "kind": "bigquery#table",
+  "lastModifiedTime": "1774814535199",
+  "location": "us-central1",
+  "numActiveLogicalBytes": "0",
+  "numActivePhysicalBytes": "2373202",
+  "numBytes": "0",
+  "numCurrentPhysicalBytes": "985",
+  "numLongTermBytes": "0",
+  "numLongTermLogicalBytes": "0",
+  "numLongTermPhysicalBytes": "0",
+  "numRows": "0",
+  "numTimeTravelPhysicalBytes": "2372217",
+  "numTotalLogicalBytes": "0",
+  "numTotalPhysicalBytes": "2373202",
+  "schema": {
+    "fields": [
+      {
+        "name": "num_documento",
+        "type": "STRING"
+      },
+      {
+        "name": "tipo_documento",
+        "type": "STRING"
+      },
+      {
+        "name": "num_factura_origen",
+        "type": "STRING"
+      },
+      {
+        "name": "serial_control",
+        "type": "STRING"
+      },
+      {
+        "name": "fecha_documento",
+        "type": "DATE"
+      },
+      {
+        "name": "hora_documento",
+        "type": "STRING"
+      },
+      {
+        "name": "rif_cliente",
+        "type": "STRING"
+      },
+      {
+        "name": "razon_social",
+        "type": "STRING"
+      },
+      {
+        "name": "serial_impresora",
+        "type": "STRING"
+      },
+      {
+        "name": "subtotal",
+        "type": "FLOAT"
+      },
+      {
+        "name": "base_imponible_16",
+        "type": "FLOAT"
+      },
+      {
+        "name": "iva_16",
+        "type": "FLOAT"
+      },
+      {
+        "name": "medios_pago",
+        "type": "STRING"
+      },
+      {
+        "name": "cambio",
+        "type": "FLOAT"
+      },
+      {
+        "name": "igtf",
+        "type": "FLOAT"
+      },
+      {
+        "name": "total",
+        "type": "FLOAT"
+      },
+      {
+        "name": "etiqueta",
+        "type": "STRING"
+      },
+      {
+        "name": "filename",
+        "type": "STRING"
+      },
+      {
+        "name": "gmail_msg_id",
+        "type": "STRING"
+      },
+      {
+        "name": "processed_at",
+        "type": "TIMESTAMP"
+      }
+    ]
+  },
+  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/gestion-365/datasets/mailer_raw/tables/mailer_fact_received",
+  "tableReference": {
+    "datasetId": "mailer_raw",
+    "projectId": "gestion-365",
+    "tableId": "mailer_fact_received"
+  },
+  "type": "TABLE"
+}

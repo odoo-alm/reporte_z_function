@@ -1,0 +1,142 @@
+{
+  "creationTime": "1774121566583",
+  "etag": "SAh9XTLZVJZs3slwZbYsvQ==",
+  "id": "gestion-365:mailer_raw.mailer_megasoft_raw",
+  "kind": "bigquery#table",
+  "lastModifiedTime": "1774553316559",
+  "location": "us-central1",
+  "numActiveLogicalBytes": "0",
+  "numActivePhysicalBytes": "201921",
+  "numBytes": "0",
+  "numCurrentPhysicalBytes": "1028",
+  "numLongTermBytes": "0",
+  "numLongTermLogicalBytes": "0",
+  "numLongTermPhysicalBytes": "0",
+  "numRows": "0",
+  "numTimeTravelPhysicalBytes": "200893",
+  "numTotalLogicalBytes": "0",
+  "numTotalPhysicalBytes": "201921",
+  "schema": {
+    "fields": [
+      {
+        "name": "fecha_transaccion",
+        "type": "STRING"
+      },
+      {
+        "name": "merchant_name",
+        "type": "STRING"
+      },
+      {
+        "name": "afiliado",
+        "type": "STRING"
+      },
+      {
+        "name": "caja",
+        "type": "STRING"
+      },
+      {
+        "name": "terminal",
+        "type": "STRING"
+      },
+      {
+        "name": "seq_num",
+        "type": "INTEGER"
+      },
+      {
+        "name": "pan_pci",
+        "type": "STRING"
+      },
+      {
+        "name": "rif",
+        "type": "STRING"
+      },
+      {
+        "name": "transaction_name",
+        "type": "STRING"
+      },
+      {
+        "name": "acquirer_name",
+        "type": "STRING"
+      },
+      {
+        "name": "card_name",
+        "type": "STRING"
+      },
+      {
+        "name": "auth_id",
+        "type": "STRING"
+      },
+      {
+        "name": "ref",
+        "type": "STRING"
+      },
+      {
+        "name": "rrn",
+        "type": "STRING"
+      },
+      {
+        "name": "fecha_cierre",
+        "type": "STRING"
+      },
+      {
+        "name": "lote",
+        "type": "STRING"
+      },
+      {
+        "name": "reversar",
+        "type": "INTEGER"
+      },
+      {
+        "name": "anulada",
+        "type": "INTEGER"
+      },
+      {
+        "name": "codigo_respuesta",
+        "type": "STRING"
+      },
+      {
+        "name": "telefono",
+        "type": "STRING"
+      },
+      {
+        "name": "monto",
+        "type": "FLOAT"
+      },
+      {
+        "name": "tasa_cambio",
+        "type": "FLOAT"
+      },
+      {
+        "name": "monto_cambio",
+        "type": "FLOAT"
+      },
+      {
+        "name": "moneda_cambio",
+        "type": "STRING"
+      },
+      {
+        "name": "etiqueta",
+        "type": "STRING"
+      },
+      {
+        "name": "filename",
+        "type": "STRING"
+      },
+      {
+        "name": "gmail_msg_id",
+        "type": "STRING"
+      },
+      {
+        "name": "processed_at",
+        "type": "TIMESTAMP"
+      }
+    ]
+  },
+  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/gestion-365/datasets/mailer_raw/tables/mailer_megasoft_raw",
+  "tableReference": {
+    "datasetId": "mailer_raw",
+    "projectId": "gestion-365",
+    "tableId": "mailer_megasoft_raw"
+  },
+  "type": "TABLE"
+}
