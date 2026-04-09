@@ -32,6 +32,7 @@ steps:
       - --concurrency=1
       - --service-account=233079260983-compute@developer.gserviceaccount.com
       - --no-allow-unauthenticated
+      - --clear-base-image
       - --quiet
 
 images:
