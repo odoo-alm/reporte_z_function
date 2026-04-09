@@ -25,7 +25,8 @@ BQ_TABLE_FACT = "mailer_raw.mailer_fact_received"
 BQ_TABLE_NC   = "mailer_raw.mailer_nc_received"
 BQ_TABLE_UBII = "mailer_raw.mailer_ubii_raw"
 BQ_TABLE_PDYA = "mailer_raw.mailer_pdya_raw"
-BQ_TABLE_MEGA = "mailer_raw.mailer_megasoft_raw"
+BQ_TABLE_MEGA      = "mailer_raw.mailer_megasoft_raw"
+BQ_TABLE_CREDICARD = "mailer_raw.mailer_credicard_raw"
 
 MEDIOS_CONOCIDOS = sorted([
     "MEGA - MAN", "MEGA", "UBII", "EFEC - DOLAR", "EFEC - BS",
@@ -56,6 +57,7 @@ def classify(filename):
     if "LIQUIDACION"   in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "UBII"
     if "ORDERDETAILS"  in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "PDYA"
     if "TRANSACCIONES" in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "MEGA"
+    if fu.endswith(".JSON"):                                                             return "CREDICARD"
     return None
 
 # ---------------------------------------------------------------------------
@@ -477,6 +479,51 @@ def parse_megasoft(raw_bytes, filename, etiqueta):
     return records
 
 # ---------------------------------------------------------------------------
+# Parser: Credicard (JSON)
+# ---------------------------------------------------------------------------
+def _parse_bs(raw):
+    if not raw:
+        return None
+    try:
+        return float(str(raw).replace(" Bs", "").replace(".", "").replace(",", ".").strip())
+    except ValueError:
+        return None
+
+def parse_credicard(raw_bytes, filename, etiqueta):
+    try:
+        data = json.loads(raw_bytes.decode("utf-8", errors="replace"))
+    except Exception as e:
+        logger.error(f"[process] credicard {filename}: JSON inválido — {e}")
+        return []
+    records = []
+    for row in data:
+        if not row.get("0") or str(row.get("6", "")).strip() == "Total":
+            continue
+        try:
+            records.append({
+                "afiliado":     str(row["0"]).strip(),
+                "fecha":        datetime.strptime(str(row["1"]).strip(), "%d/%m/%Y").strftime("%Y-%m-%d") if row.get("1") else None,
+                "lote":         int(row["2"]) if row.get("2") else None,
+                "terminal":     str(row["3"]).strip() if row.get("3") else None,
+                "producto":     str(row["4"]).strip() if row.get("4") else None,
+                "banco":        str(row["5"]).strip() if row.get("5") else None,
+                "tarjeta":      str(row["6"]).strip() if row.get("6") else None,
+                "autorizacion": str(row["7"]).strip() if row.get("7") else None,
+                "monto":        _parse_bs(row.get("8")),
+                "comision":     _parse_bs(row.get("9")),
+                "islr":         _parse_bs(row.get("10")),
+                "abonado":      _parse_bs(row.get("11")),
+                "etiqueta":     etiqueta,
+                "filename":     filename,
+                "gmail_msg_id": "",
+                "processed_at": datetime.now(tz=timezone.utc).isoformat(),
+            })
+        except Exception as e:
+            logger.warning(f"[process] credicard {filename} fila omitida — {e}")
+    logger.info(f"[process] credicard {filename}: {len(records)} filas.")
+    return records
+
+# ---------------------------------------------------------------------------
 # Carga BQ
 # ---------------------------------------------------------------------------
 def _load_to_bq(records, table):
@@ -513,7 +560,7 @@ def process():
     filtro_etiqueta = body.get("etiqueta")  # ej: "BARAKO"
     _TIPO_ALIAS = {
         "pedidosya": "PDYA", "ubii": "UBII", "megasoft": "MEGA",
-        "z": "REPZ", "facturas": "FACT", "nc": "NC",
+        "z": "REPZ", "facturas": "FACT", "nc": "NC", "credicard": "CREDICARD",
     }
     _t = body.get("tipo")
     filtro_tipo = _TIPO_ALIAS.get(_t.lower(), _t.upper()) if _t else None
@@ -538,10 +585,12 @@ def process():
     lotes = {
         BQ_TABLE_Z: [], BQ_TABLE_FACT: [], BQ_TABLE_NC: [],
         BQ_TABLE_UBII: [], BQ_TABLE_PDYA: [], BQ_TABLE_MEGA: [],
+        BQ_TABLE_CREDICARD: [],
     }
     tabla_map = {
         "REPZ": BQ_TABLE_Z, "FACT": BQ_TABLE_FACT, "NC": BQ_TABLE_NC,
         "UBII": BQ_TABLE_UBII, "PDYA": BQ_TABLE_PDYA, "MEGA": BQ_TABLE_MEGA,
+        "CREDICARD": BQ_TABLE_CREDICARD,
     }
 
     stats = {t.split(".")[-1]: {"archivos": 0, "registros": 0} for t in lotes}
@@ -567,9 +616,10 @@ def process():
                 if   tipo == "REPZ": records = [r for r in [parse_repz(content, filename, etiqueta)] if r]
                 elif tipo == "FACT": records = parse_facturas(content, filename, etiqueta)
                 else:                records = parse_nc(content, filename, etiqueta)
-            elif tipo == "UBII": records = parse_ubii(raw_bytes, filename, etiqueta)
-            elif tipo == "PDYA": records = parse_pedidosya(raw_bytes, filename, etiqueta)
-            elif tipo == "MEGA": records = parse_megasoft(raw_bytes, filename, etiqueta)
+            elif tipo == "UBII":      records = parse_ubii(raw_bytes, filename, etiqueta)
+            elif tipo == "PDYA":      records = parse_pedidosya(raw_bytes, filename, etiqueta)
+            elif tipo == "MEGA":      records = parse_megasoft(raw_bytes, filename, etiqueta)
+            elif tipo == "CREDICARD": records = parse_credicard(raw_bytes, filename, etiqueta)
             else:
                 continue
 
