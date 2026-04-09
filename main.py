@@ -10,7 +10,7 @@ import threading
 from datetime import datetime, timezone
 
 import google.auth
-import google.auth.transport.requestsgcloud 
+import google.auth.transport.requests
 from flask import Flask, jsonify, request
 from google.auth import iam
 from google.auth.transport import requests as auth_requests
