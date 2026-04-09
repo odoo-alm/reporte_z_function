@@ -19,7 +19,7 @@ BQ_TABLE_PDYA = "mailer_raw.mailer_pdya_raw"
 PAUSE_S       = 5
 
 def parse_pedidosya(raw_bytes, filename, msg_id, etiqueta):
-    sf = lambda v: float(v) if v is not None else None
+    sf = lambda v: float(v) if v is not None and str(v).strip() != "" else None
     ss = lambda v: str(v).strip() if v is not None else None
     wb = openpyxl.load_workbook(io.BytesIO(raw_bytes), read_only=True)
     ws = wb[wb.sheetnames[0]]
