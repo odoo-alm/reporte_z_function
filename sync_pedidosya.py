@@ -96,7 +96,7 @@ def sync_pedidosya(service, bq_client, etiquetas, label_map=None, processed_labe
                 break
             msg_id = msg_meta["id"]
             try:
-                atts = get_attachments(service, msg_id, keyword="PEDIDOSYA", extensions=(".xlsx", ".xls"))
+                atts = get_attachments(service, msg_id, keyword="ORDERDETAILS", extensions=(".xlsx", ".xls"))
                 for att in atts:
                     try:
                         records = parse_pedidosya(att["raw_bytes"], att["filename"], att["msg_id"], etiqueta)

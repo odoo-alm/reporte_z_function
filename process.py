@@ -54,7 +54,7 @@ def classify(filename):
     if fu.startswith("FAC")          and fu.endswith(".TXT"):  return "FACT"
     if (fu.startswith("NDC") or fu.startswith("NC")) and fu.endswith(".TXT"):  return "NC"
     if "LIQUIDACION"   in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "UBII"
-    if "PEDIDOSYA"     in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "PDYA"
+    if "ORDERDETAILS"  in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "PDYA"
     if "TRANSACCIONES" in fu         and (fu.endswith(".XLSX") or fu.endswith(".XLS")): return "MEGA"
     return None
 
