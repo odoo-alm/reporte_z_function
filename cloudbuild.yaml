@@ -1,11 +1,28 @@
 steps:
+  # Build usando la imagen anterior como cache
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - --cache-from=us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline:latest
+      - --tag=us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline:latest
+      - --tag=us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline:$COMMIT_SHA
+      - .
+
+  # Push al Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - --all-tags
+      - us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline
+
+  # Deploy a Cloud Run con la imagen
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args:
       - gcloud
       - run
       - deploy
       - mailer-pipeline
-      - --source=.
+      - --image=us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline:$COMMIT_SHA
       - --region=us-central1
       - --project=gestion-365
       - --memory=1Gi
@@ -16,6 +33,10 @@ steps:
       - --service-account=233079260983-compute@developer.gserviceaccount.com
       - --no-allow-unauthenticated
       - --quiet
+
+images:
+  - us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline:latest
+  - us-central1-docker.pkg.dev/gestion-365/mailer-pipeline/mailer-pipeline:$COMMIT_SHA
 
 options:
   logging: CLOUD_LOGGING_ONLY
