@@ -8,6 +8,13 @@ steps:
       - --source=.
       - --region=us-central1
       - --project=gestion-365
+      - --memory=1Gi
+      - --timeout=3600
+      - --max-instances=1
+      - --min-instances=0
+      - --concurrency=1
+      - --service-account=233079260983-compute@developer.gserviceaccount.com
+      - --no-allow-unauthenticated
       - --quiet
 
 options:
