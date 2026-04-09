@@ -511,7 +511,12 @@ def process():
 
     filtro_fecha    = body.get("fecha")     # ej: "2026/03/29"
     filtro_etiqueta = body.get("etiqueta")  # ej: "BARAKO"
-    filtro_tipo     = body.get("tipo")      # ej: "REPZ"
+    _TIPO_ALIAS = {
+        "pedidosya": "PDYA", "ubii": "UBII", "megasoft": "MEGA",
+        "z": "REPZ", "facturas": "FACT", "nc": "NC",
+    }
+    _t = body.get("tipo")
+    filtro_tipo = _TIPO_ALIAS.get(_t.lower(), _t.upper()) if _t else None
 
     logger.info(f"=== PROCESS run_id={run_id} | fecha={filtro_fecha} etiqueta={filtro_etiqueta} tipo={filtro_tipo} ===")
 
