@@ -524,6 +524,23 @@ def parse_credicard(raw_bytes, filename, etiqueta):
     return records
 
 # ---------------------------------------------------------------------------
+# Control de archivos ya procesados
+# ---------------------------------------------------------------------------
+def _get_processed_filenames(table):
+    """
+    Retorna el conjunto de filenames ya insertados en la tabla BQ.
+    Se llama una vez por tabla al inicio de cada run para evitar reprocesado.
+    """
+    try:
+        rows = _bq.query(
+            f"SELECT DISTINCT filename FROM `{BQ_PROJECT}.{table}` WHERE filename IS NOT NULL"
+        ).result()
+        return {row.filename for row in rows}
+    except Exception as e:
+        logger.warning(f"[process] No se pudo obtener filenames de {table}: {e}")
+        return set()
+
+# ---------------------------------------------------------------------------
 # Carga BQ
 # ---------------------------------------------------------------------------
 def _load_to_bq(records, table):
@@ -593,7 +610,16 @@ def process():
         "CREDICARD": BQ_TABLE_CREDICARD,
     }
 
-    stats = {t.split(".")[-1]: {"archivos": 0, "registros": 0} for t in lotes}
+    # Cargar filenames ya procesados por tabla (una query por tabla al inicio del run)
+    tablas_a_consultar = (
+        [tabla_map[filtro_tipo.upper()]] if filtro_tipo and filtro_tipo.upper() in tabla_map
+        else list(lotes.keys())
+    )
+    ya_procesados = {tabla: _get_processed_filenames(tabla) for tabla in tablas_a_consultar}
+    total_skipped = sum(len(v) for v in ya_procesados.values())
+    logger.info(f"[process] Filenames ya en BQ: {total_skipped} (dedup activo)")
+
+    stats = {t.split(".")[-1]: {"archivos": 0, "registros": 0, "skipped": 0} for t in lotes}
     errores = []
 
     for blob in blobs:
@@ -606,6 +632,13 @@ def process():
         if not tipo:
             continue
         if filtro_tipo and tipo != filtro_tipo.upper():
+            continue
+
+        # Saltar archivos ya procesados
+        tabla = tabla_map.get(tipo)
+        if tabla and filename in ya_procesados.get(tabla, set()):
+            logger.info(f"[process] SKIP (ya procesado): {filename}")
+            stats[tabla.split(".")[-1]]["skipped"] += 1
             continue
 
         try:
@@ -623,7 +656,6 @@ def process():
             else:
                 continue
 
-            tabla = tabla_map[tipo]
             lotes[tabla].extend(records)
             key = tabla.split(".")[-1]
             stats[key]["archivos"]  += 1
@@ -659,6 +691,7 @@ def process():
         "status":    status,
         "duracion_s": duracion,
         "archivos":  {k: v["archivos"]  for k, v in stats.items()},
+        "skipped":   {k: v["skipped"]   for k, v in stats.items()},
         "registros": {k: v["registros"] for k, v in stats.items()},
         "cargados":  cargados,
         "errores":   errores,
