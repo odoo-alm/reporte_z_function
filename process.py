@@ -528,14 +528,17 @@ def parse_credicard(raw_bytes, filename, etiqueta):
 # ---------------------------------------------------------------------------
 def _get_processed_filenames(table):
     """
-    Retorna el conjunto de filenames ya insertados en la tabla BQ.
-    Se llama una vez por tabla al inicio de cada run para evitar reprocesado.
+    Retorna el conjunto de basenames ya insertados en la tabla BQ.
+    Usa basename (no el path completo) para que coincida tanto con registros
+    cargados vía email-sync (guardan solo el filename) como vía GCS (guardan
+    el path completo). Se llama una vez por tabla al inicio del run.
     """
     try:
         rows = _bq.query(
-            f"SELECT DISTINCT filename FROM `{BQ_PROJECT}.{table}` WHERE filename IS NOT NULL"
+            f"SELECT DISTINCT REGEXP_EXTRACT(filename, r'[^/]+$') AS basename"
+            f" FROM `{BQ_PROJECT}.{table}` WHERE filename IS NOT NULL"
         ).result()
-        return {row.filename for row in rows}
+        return {row.basename for row in rows if row.basename}
     except Exception as e:
         logger.warning(f"[process] No se pudo obtener filenames de {table}: {e}")
         return set()
@@ -634,9 +637,10 @@ def process():
         if filtro_tipo and tipo != filtro_tipo.upper():
             continue
 
-        # Saltar archivos ya procesados
+        # Saltar archivos ya procesados (compara por basename para cubrir
+        # tanto registros cargados vía email-sync como vía GCS path completo)
         tabla = tabla_map.get(tipo)
-        if tabla and filename in ya_procesados.get(tabla, set()):
+        if tabla and basename in ya_procesados.get(tabla, set()):
             logger.info(f"[process] SKIP (ya procesado): {filename}")
             stats[tabla.split(".")[-1]]["skipped"] += 1
             continue
