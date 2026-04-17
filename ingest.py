@@ -54,7 +54,8 @@ PAUSE_S               = 3  # pausa entre correos — menor que process porque no
 ZELLE_SENDERS = {
     "chase":       ["no.reply.alerts@chase.com", "alertsp@chase.com"],
     "wellsfargo":  ["alerts@notify.wellsfargo.com"],
-    "bofa":        ["onlinebanking@ealerts.bankofamerica.com"],
+    "bofa":        ["onlinebanking@ealerts.bankofamerica.com",
+                    "customerservice@ealerts.bankofamerica.com"],
 }
 
 # ---------------------------------------------------------------------------
@@ -369,6 +370,47 @@ def parse_zelle_wellsfargo(body_text: str, msg_id: str, etiqueta: str, msg_date:
     }
 
 
+# ---------------------------------------------------------------------------
+# Parser Zelle — Bank of America
+# ---------------------------------------------------------------------------
+def parse_zelle_bofa(body_text: str, msg_id: str, etiqueta: str, msg_date: str) -> dict | None:
+    """
+    Parsea body de BofA Zelle.
+    Formato: 'NOMBRE le envió $XX.XX' (en el heading del HTML, sin número de confirmación).
+    La fecha se toma del header Date del correo (msg_date = YYYY/MM/DD).
+    """
+    sender_m = re.search(r"(.+?)\s+le envi[oó]\s+\$\s*([\d,]+\.?\d*)", body_text, re.IGNORECASE)
+    if not sender_m:
+        return None
+
+    monto_str = sender_m.group(2).replace(",", "")
+    try:
+        monto = float(monto_str)
+    except ValueError:
+        return None
+
+    fecha_str = None
+    if msg_date:
+        try:
+            dt = datetime.strptime(msg_date, "%Y/%m/%d")
+            fecha_str = dt.strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+
+    return {
+        "id":           str(uuid.uuid4()),
+        "banco":        "BOFA",
+        "emisor":       sender_m.group(1).strip().upper(),
+        "monto_usd":    monto,
+        "fecha":        fecha_str,
+        "referencia":   None,  # BofA Zelle alerts no incluyen número de confirmación
+        "memo":         None,
+        "etiqueta":     etiqueta,
+        "gmail_msg_id": msg_id,
+        "processed_at": datetime.now(tz=timezone.utc).isoformat(),
+    }
+
+
 def parse_zelle_body(body_text: str, sender_email: str, msg_id: str, etiqueta: str, msg_date: str) -> dict | None:
     """Dispatcher por banco según el remitente."""
     sender_lower = sender_email.lower()
@@ -376,6 +418,8 @@ def parse_zelle_body(body_text: str, sender_email: str, msg_id: str, etiqueta: s
         return parse_zelle_chase(body_text, msg_id, etiqueta, msg_date)
     elif any(s in sender_lower for s in ZELLE_SENDERS["wellsfargo"]):
         return parse_zelle_wellsfargo(body_text, msg_id, etiqueta, msg_date)
+    elif any(s in sender_lower for s in ZELLE_SENDERS["bofa"]):
+        return parse_zelle_bofa(body_text, msg_id, etiqueta, msg_date)
     return None
 
 
