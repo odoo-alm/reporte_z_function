@@ -1,5 +1,6 @@
 # =============================================================================
-# sync_ubii.py  v3 — usa utils.py
+# sync_ubii.py  v4 — schema detalle por transacción (detalles_lote_U*.xlsx)
+# Tabla BQ: mailer_raw.mailer_ubii_raw
 # =============================================================================
 
 import io
@@ -18,9 +19,20 @@ BQ_PROJECT    = "gestion-365"
 BQ_TABLE_UBII = "mailer_raw.mailer_ubii_raw"
 PAUSE_S       = 5
 
+
+def _parse_fecha(raw):
+    """'01-04-2026' → '2026-04-01'"""
+    if raw is None:
+        return None
+    if hasattr(raw, "strftime"):
+        return raw.strftime("%Y-%m-%d")
+    try:
+        return datetime.strptime(str(raw).strip(), "%d-%m-%Y").strftime("%Y-%m-%d")
+    except ValueError:
+        return str(raw).strip()
+
+
 def parse_ubii(raw_bytes, filename, msg_id, etiqueta):
-    sf = lambda v: float(v) if v is not None else None
-    ss = lambda v: str(v).strip() if v is not None else None
     wb = openpyxl.load_workbook(io.BytesIO(raw_bytes), read_only=True)
     ws = wb[wb.sheetnames[0]]
     records = []
@@ -28,23 +40,26 @@ def parse_ubii(raw_bytes, filename, msg_id, etiqueta):
         if i == 0 or row[0] is None:
             continue
         try:
-            fecha_raw = row[0]
             records.append({
-                "fecha_cierre": fecha_raw.strftime("%Y-%m-%d") if hasattr(fecha_raw, "strftime") else ss(fecha_raw),
-                "terminal": ss(row[1]), "oficina": ss(row[2]),
-                "nro_lote": int(row[3]) if row[3] is not None else None,
-                "tipo": ss(row[4]), "inmediata": ss(row[5]),
-                "monto": sf(row[6]), "monto_tdc": sf(row[7]), "monto_tdd": sf(row[8]),
-                "comision_tdc": sf(row[9]), "comision_islr": sf(row[10]), "comision_tdd": sf(row[11]),
-                "comision_transferencia": sf(row[12]), "comision_inmediata": sf(row[13]),
-                "comision_fee": sf(row[14]), "monto_cuota_credito": sf(row[15]),
-                "monto_gastos_admin_credito": sf(row[16]), "monto_gastos_reactivacion_credito": sf(row[17]),
-                "monto_nota_debito": sf(row[18]), "monto_ajuste_liquidacion": sf(row[19]),
-                "monto_a_liquidar": sf(row[20]), "monto_tdc_visa": sf(row[21]),
-                "comision_tdc_visa": sf(row[22]), "islr_tdc_visa": sf(row[23]),
-                "comision_transferencia_visa": sf(row[24]), "monto_a_liquidar_visa": sf(row[25]),
-                "etiqueta": etiqueta, "filename": filename,
-                "gmail_msg_id": msg_id, "processed_at": datetime.now(tz=timezone.utc).isoformat(),
+                "nro_lote":          int(row[0]) if row[0] is not None else None,
+                "fecha":             _parse_fecha(row[1]),
+                "hora":              str(row[2]).strip() if row[2] is not None else None,
+                "tipo_transaccion":  str(row[3]).strip() if row[3] is not None else None,
+                "referencia":        str(row[4]).strip() if row[4] is not None else None,
+                "tarjeta":           str(row[5]).strip() if row[5] is not None else None,
+                "tipo_tarjeta":      str(row[6]).strip() if row[6] is not None else None,
+                "codigo_aprobacion": str(row[7]).strip() if row[7] is not None else None,
+                "monto":             float(row[8]) if row[8] is not None else None,
+                "total":             float(row[9]) if row[9] is not None else None,
+                "monto_tasa":        str(row[10]).strip() if row[10] is not None else None,
+                "monto_comision":    float(row[11]) if row[11] is not None else None,
+                "tasa_islr":         str(row[12]).strip() if row[12] is not None else None,
+                "monto_islr":        float(row[13]) if row[13] is not None else None,
+                "reversada":         bool(row[14]) if row[14] is not None else None,
+                "etiqueta":          etiqueta,
+                "filename":          filename,
+                "gmail_msg_id":      msg_id,
+                "processed_at":      datetime.now(tz=timezone.utc).isoformat(),
             })
         except Exception as e:
             logger.warning(f"[sync_ubii] {filename}: fila {i} omitida — {e}")
@@ -89,7 +104,7 @@ def sync_ubii(service, bq_client, etiquetas, label_map=None, processed_label_id=
                 break
             msg_id = msg_meta["id"]
             try:
-                atts = get_attachments(service, msg_id, keyword="LIQUIDACION", extensions=(".xlsx", ".xls"))
+                atts = get_attachments(service, msg_id, keyword="detalles_lote", extensions=(".xlsx", ".xls"))
                 for att in atts:
                     try:
                         records = parse_ubii(att["raw_bytes"], att["filename"], att["msg_id"], etiqueta)
