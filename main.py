@@ -30,6 +30,7 @@ from sync_megasoft  import sync_megasoft
 from sync_pedidosya import sync_pedidosya
 from sync_ubii      import sync_ubii
 from sync_credicard import sync_credicard
+from sync_platco    import sync_platco
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -90,6 +91,7 @@ MODULOS = [
     {"key": "pedidosya", "fn": sync_pedidosya, "label": "PedidosYa"},
     {"key": "ubii",      "fn": sync_ubii,      "label": "Ubii"},
     {"key": "credicard", "fn": sync_credicard, "label": "Credicard"},
+    {"key": "platco",    "fn": sync_platco,    "label": "Platco"},
 ]
 
 # ---------------------------------------------------------------------------

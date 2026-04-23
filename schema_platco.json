@@ -1,0 +1,21 @@
+[
+  { "name": "terminal",          "type": "STRING" },
+  { "name": "nro_lote",          "type": "STRING" },
+  { "name": "secuencia",         "type": "STRING" },
+  { "name": "fecha_sesion",      "type": "DATE"   },
+  { "name": "tipo_transaccion",  "type": "STRING" },
+  { "name": "tarjeta",           "type": "STRING" },
+  { "name": "nro_autorizacion",  "type": "STRING" },
+  { "name": "fecha_transaccion", "type": "DATE"   },
+  { "name": "tipo_captura",      "type": "STRING" },
+  { "name": "monto",             "type": "FLOAT"  },
+  { "name": "descuento",         "type": "FLOAT"  },
+  { "name": "retencion_islr",    "type": "FLOAT"  },
+  { "name": "estado",            "type": "STRING" },
+  { "name": "fecha_abono",       "type": "DATE"   },
+  { "name": "monto_abonado",     "type": "FLOAT"  },
+  { "name": "etiqueta",          "type": "STRING" },
+  { "name": "filename",          "type": "STRING" },
+  { "name": "gmail_msg_id",      "type": "STRING" },
+  { "name": "processed_at",      "type": "TIMESTAMP" }
+]

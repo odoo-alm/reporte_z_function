@@ -9,3 +9,7 @@
 - No sycophantic openers or closing fluff.
 - Keep solutions simple and direct.
 - User instructions always override this file.
+
+## GCP / Cloud Run
+- NEVER run `gcloud`, `gsutil`, `bq`, or any GCP CLI command directly — no permissions.
+- When GCP actions are needed, provide the command/code for the user to run manually.
